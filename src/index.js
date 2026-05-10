@@ -16,7 +16,7 @@ let currentCityName = 'Da Lat';
 
 async function getWeatherData(location) {
   const response = await fetch(
-    `https://weather.visualcrossing.com/VisualCrossingWebServices/rest/services/timeline/${location}?key=5ADA4NLN5C9KYT7EABH2P4TV2`
+    `https://weather.visualcrossing.com/VisualCrossingWebServices/rest/services/timeline/${location}?key=5ADA4NLN5C9KYT7EABH2P4TV2&unitGroup=metric`
   );
 
   const data = await response.json();
@@ -25,28 +25,24 @@ async function getWeatherData(location) {
 }
 
 function processWeatherData(data) {
-  const fTemperature = data.days[0].temp;
-  const cTemperature = ((fTemperature - 32) / 1.8).toFixed(1);
-
-  const fFeelsLike = data.days[0].feelslike;
-  const cFeelsLike = ((fFeelsLike - 32) / 1.8).toFixed(1);
-
   const cityName = data.resolvedAddress;
   const time = data.days[0].datetime;
+  const icon = data.days[0].icon;
+  const temperature = Math.round(data.days[0].temp) + '°C';
   const condition = data.days[0].conditions;
+  const feelsLike = Math.round(data.days[0].feelslike) + '°C';
   const humidity = data.days[0].humidity + '%';
   const windGusts = data.days[0].windgust + ' km/h';
-  const icon = data.days[0].icon;
 
   return {
     cityName,
     time,
-    cTemperature,
+    icon,
+    temperature,
     condition,
-    cFeelsLike,
+    feelsLike,
     humidity,
     windGusts,
-    icon,
   };
 }
 
@@ -56,12 +52,14 @@ async function init(cityName) {
   const data = await getWeatherData(cityName);
   const weather = processWeatherData(data);
 
+  const iconModule = await import(`./assets/${weather.icon}.svg`);
+  icon.src = iconModule.default;
+
   address.textContent = weather.cityName;
   time.textContent = weather.time;
-  //icon
-  temperature.textContent = weather.cTemperature;
+  temperature.textContent = weather.temperature;
   condition.textContent = weather.condition;
-  feelsLike.textContent = weather.cFeelsLike;
+  feelsLike.textContent = weather.feelsLike;
   humidity.textContent = weather.humidity;
   windGusts.textContent = weather.windGusts;
 }
