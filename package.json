@@ -4,13 +4,13 @@
   "description": "Reusable webpack starter template",
   "main": "index.js",
   "scripts": {
-  "test": "echo \"Error: no test specified\" && exit 1",
-  "start": "webpack serve --open --config webpack.dev.js",
-  "build": "webpack --config webpack.prod.js",
-  "lint": "eslint .",
-  "lint:fix": "eslint . --fix",
-  "format": "prettier --write ."
-},
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "webpack serve --open --config webpack.dev.js",
+    "build": "webpack --config webpack.prod.js",
+    "lint": "eslint .",
+    "lint:fix": "eslint . --fix",
+    "format": "prettier --write ."
+  },
   "keywords": [],
   "author": "",
   "license": "ISC",

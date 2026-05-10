@@ -1,1 +1,1 @@
-console.log('Webpack starter is working!');
+import './style.css';
