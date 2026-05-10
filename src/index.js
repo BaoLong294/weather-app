@@ -1,5 +1,8 @@
 import './style.css';
 
+const form = document.querySelector('#search-form');
+const input = document.querySelector('#search-input');
+
 async function getWeatherData(location) {
   const response = await fetch(
     `https://weather.visualcrossing.com/VisualCrossingWebServices/rest/services/timeline/${location}?key=5ADA4NLN5C9KYT7EABH2P4TV2`
@@ -36,11 +39,17 @@ function processWeatherData(data) {
   };
 }
 
-async function init() {
-  const dalatData = await getWeatherData('Da Lat');
-  const dalatWeather = processWeatherData(dalatData);
+async function init(cityName) {
+  if (!cityName) return;
 
-  console.log(dalatWeather);
+  const data = await getWeatherData(cityName);
+  const weather = processWeatherData(data);
+
+  console.log(weather);
 }
 
-init();
+form.addEventListener('submit', (e) => {
+  e.preventDefault();
+  const cityName = input.value.trim();
+  init(cityName);
+});
