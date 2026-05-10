@@ -105,4 +105,5 @@ h1 {
 
 .content .weather-detail:last-child {
   border-bottom: none;
+  padding-bottom: 0px;
 }
