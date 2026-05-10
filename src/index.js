@@ -15,13 +15,26 @@ const windGusts = document.querySelector('.wind-gusts-data');
 let currentCityName = 'Da Lat';
 
 async function getWeatherData(location) {
-  const response = await fetch(
-    `https://weather.visualcrossing.com/VisualCrossingWebServices/rest/services/timeline/${location}?key=5ADA4NLN5C9KYT7EABH2P4TV2&unitGroup=metric`
-  );
+  try {
+    const response = await fetch(
+      `https://weather.visualcrossing.com/VisualCrossingWebServices/rest/services/timeline/${location}?key=5ADA4NLN5C9KYT7EABH2P4TV2&unitGroup=metric`
+    );
 
-  const data = await response.json();
+    if (!response.ok) {
+      throw new Error(`HTTP error: ${response.status}`);
+    }
 
-  return data;
+    const data = await response.json();
+
+    if (!data.resolvedAddress) {
+      throw new Error('No city found for this search');
+    }
+
+    return data;
+  } catch (error) {
+    alert(error.message);
+    console.error(error);
+  }
 }
 
 function processWeatherData(data) {
@@ -50,6 +63,8 @@ async function init(cityName) {
   if (!cityName) return;
 
   const data = await getWeatherData(cityName);
+  if (!data) return;
+
   const weather = processWeatherData(data);
 
   const iconModule = await import(`./assets/${weather.icon}.svg`);
